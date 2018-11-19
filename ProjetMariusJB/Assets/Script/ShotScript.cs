@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,18 +15,32 @@ public class ShotScript : MonoBehaviour {
 
     public void Start()
     {
-
+	
     }
 
     // Update is called once per frame
     void Update()
     {
-
-            
+	   rb2d.velocity = transform.up * speed;
+         
         Debug.Log(rb2d.velocity);
     }
 
     
+public void OnCollisionEnter2D(Collision2D collision)
+{
+var hit = collision.gameObject;
+if (hit.tag == "Wall")
+{
+Destroy(this);
+}
+if (hit.tag == "Bullet")
+{
+Destroy(hit);
+Destroy(this);
+}
+}
+
 
     void HitTarget()
     {
