@@ -8,6 +8,7 @@ public class ShotScript : MonoBehaviour {
     public float speed = 70f;
     public Transform Player;
     private GameObject Spawnpoint;
+    public GameObject Bullet;
 
     public float explosionRadius = 0f;
     public GameObject impactEffect;
@@ -23,23 +24,24 @@ public class ShotScript : MonoBehaviour {
     {
 	   rb2d.velocity = transform.up * speed;
          
-        Debug.Log(rb2d.velocity);
+        //Debug.Log(rb2d.velocity);
     }
 
     
-public void OnCollisionEnter2D(Collision2D collision)
-{
-var hit = collision.gameObject;
-if (hit.tag == "Wall")
-{
-Destroy(this);
-}
-if (hit.tag == "Bullet")
-{
-Destroy(hit);
-Destroy(this);
-}
-}
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        GameObject hit = collision.gameObject;
+        Debug.Log(hit.tag);
+        if (hit.tag == "Wall")
+        {
+            Destroy(this.gameObject);
+        }
+        if (hit.tag == "Bullet")
+        {
+            Destroy(hit);
+            Destroy(this.gameObject);
+        }
+    }
 
 
     void HitTarget()
