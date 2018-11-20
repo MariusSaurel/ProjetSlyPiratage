@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ShotScript : MonoBehaviour {
 
+    public playerController playerControllerScript;
+    public EnemyController EnemyScript;
+
     public Rigidbody2D rb2d;
     public float speed = 70f;
     public Transform Player;
@@ -13,10 +16,11 @@ public class ShotScript : MonoBehaviour {
     public float explosionRadius = 0f;
     public GameObject impactEffect;
     private Vector3 dir;
+    public playerController PlayerScript;
 
     public void Start()
     {
-	
+        rb2d.velocity = transform.up * speed;
     }
 
     // Update is called once per frame
@@ -31,7 +35,6 @@ public class ShotScript : MonoBehaviour {
     public void OnCollisionEnter2D(Collision2D collision)
     {
         GameObject hit = collision.gameObject;
-        Debug.Log(hit.tag);
         if (hit.tag == "Wall")
         {
             Destroy(this.gameObject);
@@ -40,6 +43,15 @@ public class ShotScript : MonoBehaviour {
         {
             Destroy(hit);
             Destroy(this.gameObject);
+        }
+        if (hit.tag == "Player")
+        {
+            hit.GetComponent<playerController>().DamagePlayer(1);
+        }
+        if (hit.tag == "Enemy")
+        {
+            Destroy(this.gameObject);
+            hit.GetComponent<EnemyController>().DamageEnemy(1);
         }
     }
 

@@ -62,7 +62,6 @@ public class playerController : MonoBehaviour
     {
         GameObject bulletInstance = (GameObject) Instantiate(bulletPrefab, bulletSpawn.position, transform.rotation);
         Vector3 start = bulletInstance.transform.forward;
-        Debug.Log(start);
         bulletInstance.GetComponent<Rigidbody2D>().velocity = start;
         Physics2D.IgnoreCollision(bulletInstance.GetComponent<Collider2D>(), GetComponent<Collider2D>());
         

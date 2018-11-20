@@ -79,8 +79,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\EnemyScript.cs" />
     <Compile Include="Assets\Script\CameraController.cs" />
+    <Compile Include="Assets\Script\EnemyController.cs" />
     <Compile Include="Assets\Script\Player.cs" />
     <Compile Include="Assets\Script\ShotScript.cs" />
     <Compile Include="Assets\Script\playerController.cs" />
