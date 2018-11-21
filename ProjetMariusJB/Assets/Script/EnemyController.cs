@@ -8,12 +8,8 @@ public class EnemyController : MonoBehaviour
 {
 
     public string EnemyType;
-    public Transform PlayerT;
-    public float turnSpeed = 1f;
     public Rigidbody2D rb2d;
-    private playerController player;
-    private int playerHealth;
-    public playerController playerControllerScript;
+    private GameObject player;
     public int Health;
     public GameObject BulletPrefab;
     private EnemyController EnemyScript;
@@ -26,7 +22,8 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<playerController>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<GameObject>();
+
     }
 
     void Update()
@@ -34,7 +31,7 @@ public class EnemyController : MonoBehaviour
         if (EnemyType == "Kamikaze")
         {
             LockOnTarget();
-            transform.position = Vector2.MoveTowards(transform.position, PlayerT.position, 5 * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, player.transform.position, 5 * Time.deltaTime);
         }
         if (EnemyType == "Tourelle")
         {
@@ -53,8 +50,13 @@ public class EnemyController : MonoBehaviour
 
     public void LockOnTarget()
     {
-        float angle = Mathf.Atan2(PlayerT.position.y, PlayerT.position.x) * Mathf.Rad2Deg;
-        this.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+        Vector3 vectorToTarget = player.transform.position - transform.position;
+        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        Quaternion q = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * 100);
+
+        //float angle = Mathf.Atan2(PlayerT.position.y, PlayerT.position.x) * Mathf.Rad2Deg;
+        //this.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
