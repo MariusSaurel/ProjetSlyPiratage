@@ -22,7 +22,7 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<GameObject>();
+        player = GameObject.FindGameObjectWithTag("Player");
 
     }
 

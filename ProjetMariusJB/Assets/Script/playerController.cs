@@ -11,13 +11,13 @@ public class playerController : MonoBehaviour
     private float nextFire;
 
     private Rigidbody2D rb2d;
-    
+
     public GameObject Player;
-    
+
     public Transform shotSpawn;
     public float fireRate;
     public int health;
-    private Player player = new Player();
+
 
     public int Health
     {
@@ -40,12 +40,12 @@ public class playerController : MonoBehaviour
 
     public void Update()
     {
-            Vector3 mouse_pos = Input.mousePosition;
-            Vector3 object_pos = Camera.main.WorldToScreenPoint(Player.transform.position);
-            mouse_pos.x = mouse_pos.x - object_pos.x;
-            mouse_pos.y = mouse_pos.y - object_pos.y;
-            float angle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg;
-            Player.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 91));
+        Vector3 mouse_pos = Input.mousePosition;
+        Vector3 object_pos = Camera.main.WorldToScreenPoint(this.transform.position);
+        mouse_pos.x = mouse_pos.x - object_pos.x;
+        mouse_pos.y = mouse_pos.y - object_pos.y;
+        float angle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg;
+        this.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 91));
         if (Health <= 0)
         {
             GameOver();
@@ -60,15 +60,14 @@ public class playerController : MonoBehaviour
 
     public void Fire()
     {
-        GameObject bulletInstance = (GameObject) Instantiate(bulletPrefab, bulletSpawn.position, transform.rotation);
+        GameObject bulletInstance = (GameObject)Instantiate(bulletPrefab, bulletSpawn.position, transform.rotation);
         Vector3 start = bulletInstance.transform.forward;
-        bulletInstance.GetComponent<Rigidbody2D>().velocity = start;
-        Physics2D.IgnoreCollision(bulletInstance.GetComponent<Collider2D>(), GetComponent<Collider2D>());
-        
+        Physics2D.IgnoreCollision(bulletInstance.GetComponent<Collider2D>(), this.GetComponent<Collider2D>());
+
     }
 
-    
-	
+
+
     private void FixedUpdate()
     {
         float moveHorizontal = Input.GetAxis("Horizontal");
@@ -76,7 +75,10 @@ public class playerController : MonoBehaviour
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
         rb2d.AddForce(movement * speed);
         Vector2 mouseposition = Input.mousePosition;
-
+        if (Health <= 0)
+        {
+            GameOver();
+        }
     }
 
     public void DamagePlayer(int damage)
