@@ -15,9 +15,12 @@ public class EnemyController : MonoBehaviour
     private EnemyController EnemyScript;
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
+    public int ShieldHealth;
+    public GameObject Shield;
 
     private float nextActionTime = 0.0f;
     public float period = 0.1f;
+    public float range = 45;
 
 
     void Start()
@@ -28,20 +31,42 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        if (EnemyType == "Kamikaze")
+        if (Vector2.Distance(this.gameObject.transform.position, player.transform.position) <= range)
         {
-            LockOnTarget();
-            transform.position = Vector2.MoveTowards(transform.position, player.transform.position, 5 * Time.deltaTime);
-        }
-        if (EnemyType == "Tourelle")
-        {
-            LockOnTarget();
-            if (Time.time > nextActionTime)
+            if (EnemyType == "Kamikaze")
             {
-                nextActionTime += period;
-                Fire(1);
+                LockOnTarget();
+                transform.position = Vector2.MoveTowards(transform.position, player.transform.position, 5 * Time.deltaTime);
+            }
+            if (EnemyType == "Tourelle")
+            {
+                LockOnTarget();
+                if (Time.time > nextActionTime)
+                {
+                    nextActionTime += period;
+                    Fire();
+                }
+            }
+            if (EnemyType == "TourelleShield")
+            {
+                LockOnTarget();
+                if (Time.time > nextActionTime)
+                {
+                    nextActionTime += period;
+                    Fire();
+                }
+            }
+            if (EnemyType == "Boss01")
+            {
+                LockOnTarget();
+                if (Time.time > nextActionTime)
+                {
+                    nextActionTime += period;
+                    TireSpecial(1, 5);
+                }
             }
         }
+
         if (Health <= 0)
         {
             GameOverEnemy();
@@ -71,14 +96,53 @@ public class EnemyController : MonoBehaviour
 
     public void DamageEnemy(int damage)
     {
-        Health -= damage;
+        if (EnemyType == "TourelleShield")
+        {
+            if (ShieldHealth <= 0)
+            {
+                Health -= damage;
+            }
+            else if (ShieldHealth >= 0)
+            {
+                ShieldHealth -= damage;
+            }
+        }
+        else
+        {
+            Health -= damage;
+        }
     }
 
-    public void Fire(int nbtir)
+    public void Fire()
     {
         GameObject bulletInstance = (GameObject)Instantiate(bulletPrefab, bulletSpawn.position, transform.rotation);
         Vector3 start = bulletInstance.transform.forward;
         Physics2D.IgnoreCollision(bulletInstance.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+        Physics2D.IgnoreCollision(bulletInstance.GetComponent<Collider2D>(), Shield.GetComponent<Collider2D>());
+    }
+
+    public void TireSpecial(int TypeTir, int NombreTir)
+    {
+        if(TypeTir == 1)
+        {
+            for (int i = 0; i <= NombreTir; i++)
+            {
+                GameObject bulletInstance = (GameObject)Instantiate(bulletPrefab, bulletSpawn.position, transform.rotation);
+                Vector3 start = bulletInstance.transform.forward;
+                Physics2D.IgnoreCollision(bulletInstance.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+                Physics2D.IgnoreCollision(bulletInstance.GetComponent<Collider2D>(), Shield.GetComponent<Collider2D>());
+
+                GameObject bulletInstance2 = (GameObject)Instantiate(bulletPrefab, bulletSpawn.position, new Quaternion(transform.rotation.x,transform.rotation.y,transform.rotation.z - 10,1));
+                Vector3 start2 = bulletInstance.transform.forward;
+                Physics2D.IgnoreCollision(bulletInstance2.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+                Physics2D.IgnoreCollision(bulletInstance2.GetComponent<Collider2D>(), Shield.GetComponent<Collider2D>());
+
+                GameObject bulletInstance3 = (GameObject)Instantiate(bulletPrefab, bulletSpawn.position, new Quaternion(transform.rotation.x, transform.rotation.y, transform.rotation.z + 10, 1));
+                Vector3 start3 = bulletInstance.transform.forward;
+                Physics2D.IgnoreCollision(bulletInstance3.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+                Physics2D.IgnoreCollision(bulletInstance3.GetComponent<Collider2D>(), Shield.GetComponent<Collider2D>());
+            }
+        }
     }
 
     public void GameOverEnemy()
