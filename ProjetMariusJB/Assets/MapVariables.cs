@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+<<<<<<< HEAD
 public class MapVariables : MonoBehaviour {
 
     public int NombrePorte;
@@ -21,4 +22,26 @@ public class MapVariables : MonoBehaviour {
 	void Update () {
 		
 	}
+=======
+public class MapVariables : MonoBehaviour
+{
+
+    public int NombrePorte;
+    public bool PorteBas;
+    public bool PorteHaut;
+    public bool PorteDroite;
+    public bool PorteGauche;
+    public int posx;
+    public int posy;
+
+    public void Start()
+    {
+
+    }
+
+    public void Update()
+    {
+
+    }
+>>>>>>> master
 }

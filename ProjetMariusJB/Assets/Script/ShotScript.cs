@@ -39,11 +39,11 @@ public class ShotScript : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        if (hit.tag == "Bullet")
-        {
-            Destroy(hit);
-            Destroy(this.gameObject);
-        }
+        //if (hit.tag == "Bullet")
+        //{
+        //    Destroy(hit);
+        //    Destroy(this.gameObject);
+        //}
         if (hit.tag == "Player")
         {
             hit.GetComponent<playerController>().DamagePlayer(1);
@@ -52,6 +52,11 @@ public class ShotScript : MonoBehaviour
         {
             Destroy(this.gameObject);
             hit.GetComponent<EnemyController>().DamageEnemy(1);
+        }
+        if (hit.tag == "Porte")
+        {
+            Destroy(this.gameObject);
+            hit.GetComponent<PorteDestructibleScript>().DamageEnemy(1);
         }
     }
 
